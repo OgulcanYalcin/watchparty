@@ -23,7 +23,13 @@ export interface PublicProfile {
 }
 
 export interface MyProfile {
+    id: string;
+    name: string;
     email: string;
+    profilePicture: string | null;
+    biography: string | null;
+    reputationScore: number;
     role: 'USER' | 'ADMIN';
     status: 'ACTIVE' | 'SUSPENDED' | 'BANNED';
+    createdAt: string;
 }

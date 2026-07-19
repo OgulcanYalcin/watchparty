@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { getMyProfile, updateProfile } from "../services/users";
-import type { PublicProfile } from "../types/user";
+import type { MyProfile } from "../types/user";
 import { Navbar } from "../components/Navbar";
 
 export function ProfilePage() {
-    const [profile, setProfile] = useState<PublicProfile | null>(null);
+    const [profile, setProfile] = useState<MyProfile | null>(null);
     const [biography, setBiography] = useState('');
     const [message, setMessage] = useState('');
 
