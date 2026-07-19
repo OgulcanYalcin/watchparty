@@ -22,9 +22,7 @@ export function useChat(eventId: string) {
 
     useEffect(() => {
         const token = localStorage.getItem('accessToken');
-        const socket = io('http://localhost:3000', { auth: {
-            token
-        }});
+        const socket = io(import.meta.env.VITE_API_URL, { auth: { token } });
         socketRef.current = socket;
         socket.on('connect', () => {
             setConnected(true);
