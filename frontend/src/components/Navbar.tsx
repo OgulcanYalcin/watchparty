@@ -31,7 +31,7 @@ export function Navbar() {
               <Link to="/notifications" className='text-light/80 hover:text-yellow transition'>
               Bildirimler
               </Link>
-              <Link to="my-participations" className='text-light/80 hover:text-yellow transition'>
+              <Link to="/my-participations" className='text-light/80 hover:text-yellow transition'>
               Katılımlarım
               </Link>
               <Link to="/events/new" className='text-light/80 hover:text-yellow transition'>
