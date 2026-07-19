@@ -1,0 +1,174 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id      String  @id @default(uuid())
+  email   String  @unique
+  passwordHash String
+  name   String   
+  phoneNumber String?   @unique
+  phoneVerified Boolean  @default(false)
+  profilePicture String?
+  biography String?
+  reputationScore Int @default(0)
+  status  UserStatus @default(ACTIVE)
+  role UserRole @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  interests Interest[]
+  hostedEvents Event[]
+  eventParticipations EventParticipation[]
+  sentReviews Review[] @relation("sentReviews")
+  receivedReviews Review[] @relation("receivedReviews")
+  sentReports Report[] @relation("sentReports")
+  reportsReceived Report[] @relation("reportsReceived")
+  blockedByAsHost HostBlock[] @relation("BlockedByHost")
+  blockedAsUser HostBlock[] @relation("BlockedUsers")
+  messages Message[]
+  notifications Notification[]
+}
+
+model Interest {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  users     User[]
+  events   Event[]
+}
+
+model Event {
+  id  String @id @default(uuid())
+  title String
+  description String?
+  date DateTime
+  capacity Int
+  address String
+  latitude Float
+  longitude Float
+  placeId String
+  joiningMode JoiningMode @default(AUTOMATIC)
+  status EventStatus @default(PLANNED)
+  createdBy User @relation(fields: [createdById], references: [id])
+  createdById String 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  category Interest @relation(fields: [categoryId], references: [id])
+  categoryId String
+  isPaid Boolean @default(false)
+  eventParticipations EventParticipation[]
+  reviews Review[]
+  reports Report[]
+  messages Message[]
+}
+
+model EventParticipation {
+  id String @id @default(uuid())
+  user User @relation(fields: [userId], references: [id])
+  userId String
+  event Event @relation(fields: [eventId], references: [id])
+  eventId String
+  requestedAt DateTime @default(now())
+  requestStatus RequestStatus @default(PENDING)
+  attended Boolean? 
+  @@unique([userId, eventId])
+
+}
+
+model Review {
+  id String @id @default(uuid())
+  senderUser User @relation("sentReviews", fields: [senderUserId], references: [id] )
+  senderUserId String
+  receiverUser User @relation("receivedReviews", fields: [receiverUserId], references: [id] )
+  receiverUserId String
+  event Event @relation(fields: [eventId], references: [id])
+  eventId String
+  rating Int
+  comment String?
+  createdAt DateTime @default(now())
+  @@unique([senderUserId, receiverUserId, eventId])
+}
+
+model Report {
+  id String @id @default(uuid())
+  reporter User @relation("sentReports", fields: [reporterId], references: [id])
+  reporterId String
+  reportedUser User? @relation("reportsReceived", fields: [reportedUserId], references: [id])
+  reportedUserId String?
+  reportedEvent Event? @relation(fields: [reportedEventId], references: [id])
+  reportedEventId String?
+  reason String
+  createdAt DateTime @default(now())
+  resolved Result @default(PENDING)
+}
+model HostBlock {
+  id String @id @default(uuid())
+  hostId String
+  blockedUserId String 
+  createdAt DateTime @default(now())
+  host User @relation("BlockedByHost", fields: [hostId], references: [id])
+  blockedUser User @relation("BlockedUsers", fields: [blockedUserId], references: [id])
+  @@unique([hostId, blockedUserId])
+}
+
+model Message {
+  id String @id @default(uuid())
+  userId String
+  eventId String
+  content String
+  sentAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id])
+  event Event @relation(fields: [eventId], references: [id])
+}
+
+model Notification{
+  id String @id @default(uuid())
+  userId String
+  text String
+  isRead Boolean @default(false)
+  createdAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id])
+}
+enum Result {
+  PENDING
+  REVIEWED
+  DISMISSED
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+enum EventStatus {
+  PLANNED
+  CANCELLED
+  COMPLETED
+}
+
+enum JoiningMode {
+  AUTOMATIC
+  MANUAL
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  BANNED
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}

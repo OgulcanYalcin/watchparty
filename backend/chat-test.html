@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Chat Test</title>
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<style>
+  body { font-family: sans-serif; max-width: 600px; margin: 40px auto; }
+  input, button { padding: 8px; margin: 4px 0; width: 100%; box-sizing: border-box; }
+  #log { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto; margin-top: 10px; white-space: pre-wrap; }
+  .msg { margin-bottom: 6px; }
+</style>
+</head>
+<body>
+  <h2>Chat Test Sayfası</h2>
+
+  <label>Access Token</label>
+  <input id="token" placeholder="Bearer token buraya" />
+  <button onclick="connect()">Bağlan</button>
+
+  <label>Event ID</label>
+  <input id="eventId" placeholder="etkinlik id" />
+  <button onclick="joinEvent()">Sohbete Katıl</button>
+
+  <label>Mesaj</label>
+  <input id="content" placeholder="mesaj yaz" />
+  <button onclick="sendMessage()">Gönder</button>
+
+  <div id="log"></div>
+
+<script>
+  let socket;
+
+  function log(text) {
+    const div = document.getElementById('log');
+    div.innerHTML += '<div class="msg">' + text + '</div>';
+    div.scrollTop = div.scrollHeight;
+  }
+
+  function connect() {
+    const token = document.getElementById('token').value;
+    socket = io('http://localhost:3000', { auth: { token } });
+
+    socket.on('connect', () => log('✅ Bağlandı, socket id: ' + socket.id));
+    socket.on('disconnect', () => log('❌ Bağlantı kesildi'));
+    socket.on('error', (msg) => log('⚠️ Hata: ' + JSON.stringify(msg)));
+    socket.on('newMessage', (msg) => log('💬 Yeni mesaj: ' + JSON.stringify(msg)));
+    socket.on('connect_error', (err) => log('⚠️ Bağlantı hatası: ' + err.message));
+  }
+
+  function joinEvent() {
+    const eventId = document.getElementById('eventId').value;
+    socket.emit('joinEvent', { eventId });
+    log('➡️ joinEvent gönderildi: ' + eventId);
+  }
+
+  function sendMessage() {
+    const eventId = document.getElementById('eventId').value;
+    const content = document.getElementById('content').value;
+    socket.emit('sendMessage', { eventId, content });
+    log('➡️ sendMessage gönderildi: ' + content);
+  }
+</script>
+</body>
+</html>
