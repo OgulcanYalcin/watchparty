@@ -18,6 +18,7 @@ export function CreateEventPage() {
     const [joiningMode, setJoiningMode] = useState<'AUTOMATIC' | 'MANUAL'>('AUTOMATIC');
     const [isPaid, setIsPaid] = useState(false);
     const [error, setError] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
     
     useEffect(() => {
@@ -28,8 +29,13 @@ export function CreateEventPage() {
     }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
+        
         e.preventDefault();
+        if(isSubmitting == true) {
+            return;
+        }
         setError('');
+        setIsSubmitting(true);
         try {
             const event = await createEvent({
                 title,
@@ -45,8 +51,11 @@ export function CreateEventPage() {
                 isPaid,
             });
             navigate(`/events/${event.id}`);
-        } catch {
+        }  catch{
             setError('Etkinlik oluşturulamadı, bilgileri kontrol et.');
+        }  finally {
+            setIsSubmitting(false);
+            
         }
     };
 
@@ -59,19 +68,19 @@ export function CreateEventPage() {
                     {error && <p className='text-yellow text-sm'>{error}</p>}
                     <div>
                         <label className='text-light/60 text-sm block mb-1'>Başlık</label>
-                        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className='w-full bg-black/40 border border-light20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple' required />
+                        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className='w-full bg-surface/40 border border-light20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple' required />
                     </div>
                     <div>
                         <label className='text-light/60 text-sm block mb-1'>Açıklama</label>
-                        <textarea value={description} onChange={(e) => setDescription(e.target.value)} className='w-full bg-black/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple' rows={3}/>
+                        <textarea value={description} onChange={(e) => setDescription(e.target.value)} className='w-full bg-surface/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple' rows={3}/>
                     </div>
                     <div>
                         <label className='text-light/60 text-sm block mb-1'>Tarih ve Saat</label>
-                        <input type="datetime-local" value={date} onChange={(e) => setDate(e.target.value)} className='w-full bg-black/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple' required />
+                        <input type="datetime-local" value={date} onChange={(e) => setDate(e.target.value)} className='w-full bg-surface/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple' required />
                     </div>
                     <div>
                         <label className='text-light/60 text-sm block mb-1'>Kategori</label>
-                        <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} className='w-full bg-black/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple' required>
+                        <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} className='w-full bg-surface/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple' required>
                             {categories.map((c) => (
                                 <option key={c.id} value={c.id} className='bg-dark'>{c.name}</option>
                             ))}
@@ -79,31 +88,31 @@ export function CreateEventPage() {
                     </div>
                     <div>
                         <label className='text-light/60 text-sm block mb-1'>Adres</label>
-                        <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} className='w-full bg-black/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple' required/>
+                        <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} className='w-full bg-surface/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple' required/>
                     </div>
 
                     <div className='flex gap-3'>
                         <div className='flex-1'>
                             <label className='text-light/60 text-sm block mb-1'>Enlem</label>
-                            <input type="number" step="any" value={latitude} onChange={(e) => setLatitude(e.target.value)} className='w-full bg-black/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple'required />
+                            <input type="number" step="any" value={latitude} onChange={(e) => setLatitude(e.target.value)} className='w-full bg-surface/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple'required />
                         </div>
                         <div className='flex-1'>
                             <label className='text-light/60 text-sm block mb-1'>Boylam</label>
-                            <input type="number" step="any" value={longitude} onChange={(e) => setLongtitude(e.target.value)} className='w-full bg-black/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple' required />
+                            <input type="number" step="any" value={longitude} onChange={(e) => setLongtitude(e.target.value)} className='w-full bg-surface/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple' required />
                         </div>
                     </div>
 
                     <div>
                         <label className='text-light/60 text-sm block mb-1'>Place ID</label>
-                        <input type="text" value={placeId} onChange={(e) => setPlaceId(e.target.value)} className='w-full bg-black/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple' required/>
+                        <input type="text" value={placeId} onChange={(e) => setPlaceId(e.target.value)} className='w-full bg-surface/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple' required/>
                     </div>
                     <div>
                         <label className='text-light/60 text-sm block mb-1'>Kapasite</label>
-                        <input type="text" min={1} value={capacity} onChange={(e) => setCapacity(Number(e.target.value))} className='w-full bg-black/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple' required />
+                        <input type="text" min={1} value={capacity} onChange={(e) => setCapacity(Number(e.target.value))} className='w-full bg-surface/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple' required />
                     </div>
                     <div>
                         <label className='text-light/60 text-sm block mb-1'>Onay Modu</label>
-                        <select value={joiningMode} onChange={(e) => setJoiningMode(e.target.value as 'AUTOMATIC' | 'MANUAL')} className='w-full bg-black/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple'>
+                        <select value={joiningMode} onChange={(e) => setJoiningMode(e.target.value as 'AUTOMATIC' | 'MANUAL')} className='w-full bg-surface/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple'>
                             <option value="AUTOMATIC" className='bg-dark'>Otomatik</option>
                             <option value="MANUAL" className='bg-dark'>Manuel</option>
                         </select>
@@ -113,7 +122,7 @@ export function CreateEventPage() {
                     <input type="checkbox" checked={isPaid} onChange={(e) => setIsPaid(e.target.checked)} />Ücretli Etkinlik
                     </label>
 
-                    <button type='submit' className='bg-yellow text-dark font-semibold rounded-lg py-2 mt-2 hover:opacity-90 transition'>Etkinliği oluştur</button>
+                    <button type='submit' disabled={isSubmitting} className='bg-yellow text-dark font-semibold rounded-lg py-2 mt-2 hover:opacity-90 transition'>{isSubmitting? 'Oluşturuluyor...' : 'Etkinliği oluştur'}</button>
                 </form>
             </div>
         </div>

@@ -149,7 +149,7 @@ export function EventDetailPage() {
                 <span className="text-yellow text-xs font-semibold uppercase tracking-wide">{event.category.name}</span>
                 <h1 className="text-3xl font-bold text-light mt-2">{event.title}</h1>
                 <p className="text-light/60 mt-2">{event.description}</p>
-                <div className="bg-black/40 border border-purpler/20 rounded-xl p-5 mt-6 flex flex-col gap-2">
+                <div className="bg-surface/40 border border-purpler/20 rounded-xl p-5 mt-6 flex flex-col gap-2">
                     <p className="text-light">
                         <span className="text-purple font-medium">Adres:</span>
                         {event.address}
@@ -187,7 +187,7 @@ export function EventDetailPage() {
                             )}
                         </div>
                         {editing && (
-                            <form onSubmit={handleUpdate} className="bg-black/40 border border-purple/20 rounded-xl p-5 mb-6 flex flex-col gap-3">
+                            <form onSubmit={handleUpdate} className="bg-surface/40 border border-purple/20 rounded-xl p-5 mb-6 flex flex-col gap-3">
                                 <input type="text" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} className="bg-dark border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple" />
                                 <textarea value={editDescription} onChange={(e) => setEditDescription(e.target.value)} className="bg-dark border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple" rows={3}/>
                                 <input type="datetime-local" value={editDate} onChange={(e) => setEditDate(e.target.value)} className="bg-dark border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple" />
@@ -206,7 +206,7 @@ export function EventDetailPage() {
                         ): (
                             <div className="flex flex-col gap-3">
                                 {participants.map((p) => (
-                                    <div key={p.id} className="bg-black/40 border border-purple/20 rounded-xl p-4 flex items-center justify-between">
+                                    <div key={p.id} className="bg-surface/40 border border-purple/20 rounded-xl p-4 flex items-center justify-between">
                                         <div>
                                             <p className="text-light font-medium">{p.user.name}</p>
                                             <p className="text-light/50 text-xs">İtibar: {p.user.reputationScore} · Durum: {p.requestStatus}</p>
@@ -229,7 +229,7 @@ export function EventDetailPage() {
                         <p className="text-yellow">{chatError}</p>
                     ): (
                         <>
-                            <div className="bg-black/40 border border-purple/20 rounded-xl p-4 h-64 overflow-y-auto flex flex-col gap-2 mb-3">
+                            <div className="bg-surface/40 border border-purple/20 rounded-xl p-4 h-64 overflow-y-auto flex flex-col gap-2 mb-3">
                                 {messages.map((m) => (
                                     <div key={m.id} className="text-sm">
                                         <span className="text-purple font-medium">{m.user.name}:</span>
@@ -238,7 +238,7 @@ export function EventDetailPage() {
                                 ))}
                             </div>
                             <form onSubmit={handleSendMessage} className="flex gap-2">
-                                <input type="text" value={newMessage} onChange={(e) => setNewMessage(e.target.value)} placeholder="Mesaj yaz..." className="flex-1 bg-black/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple"/>
+                                <input type="text" value={newMessage} onChange={(e) => setNewMessage(e.target.value)} placeholder="Mesaj yaz..." className="flex-1 bg-surface/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple"/>
                                 <button type="submit" className="bg-yellow text-dark font-semibold px-4 rounded-lg hover:opacity-90 transition">Gönder</button>
                             </form>
                         </>

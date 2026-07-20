@@ -1,4 +1,4 @@
-import { IsString, IsOptional } from 'class-validator';
+import { IsString, IsOptional, IsIn } from 'class-validator';
 
 export class UpdateProfileDto {
   @IsString()
@@ -12,4 +12,8 @@ export class UpdateProfileDto {
   @IsString()
   @IsOptional()
   biography?: string;
+
+  @IsIn(['light', 'dark'])
+  @IsOptional()
+  theme?: string;
 }

@@ -48,19 +48,19 @@ export function AdminPage() {
                 <h1 className="text-2xl font-bold text-light mb-6">Admin Paneli</h1>
                 {stats && (
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-                        <div className="bg-black/40 border border-purple/20 rounded-xl p-4 text-center">
+                        <div className="bg-surface/40 border border-purple/20 rounded-xl p-4 text-center">
                             <p className="text-purple text-2xl font-bold">{stats.activeUsers}</p>
                             <p className="text-light/60 text-xs mt-1">Aktif Kullanıcı</p>
                         </div>
-                        <div className="bg-black/40 border border-purple/20 rounded-xl p-4 text-center">
+                        <div className="bg-surface/40 border border-purple/20 rounded-xl p-4 text-center">
                             <p className="text-purple text-2xl font-bold">{stats.totalEvents}</p>
                             <p className="text-light/60 text-xs mt-1">Toplam Etkinlik</p>
                         </div>
-                        <div className="bg-black/40 border border-purple/20 rounded-xl p-4 text-center">
+                        <div className="bg-surface/40 border border-purple/20 rounded-xl p-4 text-center">
                             <p className="text-purple text-2xl font-bold">{stats.attendanceRate}</p>
                             <p className="text-light/60 text-xs mt-1">Katılım Oranı</p>
                         </div>
-                        <div className="bg-black/40 border border-purple/20 rounded-xl p-4 text-center">
+                        <div className="bg-surface/40 border border-purple/20 rounded-xl p-4 text-center">
                             <p className="text-purple text-2xl font-bold">{stats.categoryDistribution.length}</p>
                             <p className="text-light/60 text-xs mt-1">Kategori Sayısı</p>
                         </div>
@@ -71,7 +71,7 @@ export function AdminPage() {
                     <p className="text-light/60">Hiç rapor yok.</p>
                 ): (
                     <div className="flex flex-col gap-3">{reports.map((r) => (
-                        <div key={r.id} className="bg-black/40 border border-purple/20 rounded-xl p-4">
+                        <div key={r.id} className="bg-surface/40 border border-purple/20 rounded-xl p-4">
                             <p className="text-light">{r.reason}</p>
                             <p className="text-light/40 text-xs mt-1">{r.reportedUserId ? `Kullanıcı: ${r.reportedUserId}` : `Etkinlik: ${r.reportedEventId}`} {' · '} {new Date(r.createdAt).toLocaleString('tr-TR')} {' · Durum: '} {r.resolved}</p>
                             <div className="flex gap-2 mt-3">{r.resolved === 'PENDING' && (

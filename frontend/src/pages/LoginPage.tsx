@@ -26,7 +26,7 @@ export function LoginPage() {
 
     return (
         <div className='min-h-screen bg-dark flex items-center justify-center px-4'>
-            <form onSubmit={handleSubmit} className='bg-black/40 border border-purple/30 rounded-2xl p-8 w-full max-w-sm flex flex-col gap-4'>
+            <form onSubmit={handleSubmit} className='bg-surface/40 border border-purple/30 rounded-2xl p-8 w-full max-w-sm flex flex-col gap-4'>
                 <h1 className='text-3xl font-bold text-purple text-center mb-2'>
                     Watch Party
                 </h1>

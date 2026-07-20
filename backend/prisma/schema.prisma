@@ -21,6 +21,7 @@ model User {
   phoneVerified Boolean  @default(false)
   profilePicture String?
   biography String?
+  theme String @default("dark")
   reputationScore Int @default(0)
   status  UserStatus @default(ACTIVE)
   role UserRole @default(USER)

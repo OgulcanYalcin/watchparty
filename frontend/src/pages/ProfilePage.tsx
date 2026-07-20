@@ -45,7 +45,7 @@ export function ProfilePage() {
                 <form onSubmit={handleSave} className="flex flex-col gap-3">
                     <label className="text-light/60 text-sm">Biyografi</label>
                     <textarea value={biography} onChange={(e) => setBiography(e.target.value)}
-                        className="bg-black/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple" rows={4}/>
+                        className="bg-surface/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple" rows={4}/>
                     <button type="submit" className="bg-yellow text-dark font-semibold rounded-lg px-6 py-2 hover:opacity-90 transition self-start">Kaydet</button>
                     {message && <p className="text-purple text-sm">{message}</p>}    
                 </form>

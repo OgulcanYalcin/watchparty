@@ -27,13 +27,13 @@ export function HomePage() {
             <div className=" max-w-5xl mx-auto px-6 py-8">
                 <h1 className="text-2xl font-bold text-light mb-6">Etkinlikler</h1>
                 <div className="flex gap-3 mb-6">
-                    <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} className="bg-black/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:otuline-none focus:border-purple">
+                    <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} className="bg-surface/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:otuline-none focus:border-purple">
                         <option value="" className="bg-dark">Tüm Kategoriler</option>
                         {categories.map((c) => (
                             <option key={c.id} value={c.id}  className="bg-dark">{c.name}</option>
                         ))}
                     </select>
-                    <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="bg-black/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple" />
+                    <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="bg-surface/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple" />
                     {(categoryId || date) && (
                         <button onClick={() => {setCategoryId(''); setDate(''); }} className="text-light/60 text-sm hover:text-yellow transition">Filtreleri Temizle</button>
                     )}

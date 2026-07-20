@@ -32,4 +32,5 @@ export interface MyProfile {
     role: 'USER' | 'ADMIN';
     status: 'ACTIVE' | 'SUSPENDED' | 'BANNED';
     createdAt: string;
+    theme: 'light' | 'dark';
 }

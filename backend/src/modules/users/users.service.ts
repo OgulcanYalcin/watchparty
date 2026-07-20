@@ -95,6 +95,7 @@ export class UsersService {
         role: true,
         status: true,
         createdAt: true,
+        theme: true,
       },
     });
     if (!user) {

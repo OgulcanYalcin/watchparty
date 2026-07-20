@@ -31,7 +31,7 @@ export function NotificationsPage() {
               ) : (
                 <div className="flex flex-col gap-3">
                     {notifications.map((n) => (
-                        <div key={n.id} onClick={() => !n.isRead && handleMarkAsRead(n.id)} className={`rounded-xl p-4 border cursor-pointer transition ${n.isRead ? 'bg-black/20 border-light/10 text-light/50' : 'bg-black/40 border-purple/40 text-light' }`}>
+                        <div key={n.id} onClick={() => !n.isRead && handleMarkAsRead(n.id)} className={`rounded-xl p-4 border cursor-pointer transition ${n.isRead ? 'bg-surface/20 border-light/10 text-light/50' : 'bg-surface/40 border-purple/40 text-light' }`}>
                             <p>{n.text}</p>
                             <p className="text-xs text-light/40 mt-1">{new Date(n.createdAt).toLocaleString('tr-TR')}
                             </p>

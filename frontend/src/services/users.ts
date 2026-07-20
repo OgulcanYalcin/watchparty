@@ -11,7 +11,7 @@ export async function getUserProfile(id:string) {
     return response.data;
 }
 
-export async function updateProfile(data: { name?: string; biography?: string; profilePicture?: string }) {
+export async function updateProfile(data: { name?: string; biography?: string; profilePicture?: string; theme?: 'light' | 'dark' }) {
     const response = await api.patch('/users/me', data);
     return response.data;
 }

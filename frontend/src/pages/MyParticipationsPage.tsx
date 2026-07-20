@@ -37,7 +37,7 @@ export function MyParticipationsPage() {
                 ): (
                     <div className="flex flex-col gap-3">
                         {participations.map((p) => (
-                            <Link key={p.id} to={`/events/${p.event.id}`} className="bg-black/40 border border-purple/20 rounded-xl p-4 flex items-center justify-between hover:border-purple transition">
+                            <Link key={p.id} to={`/events/${p.event.id}`} className="bg-surface/40 border border-purple/20 rounded-xl p-4 flex items-center justify-between hover:border-purple transition">
                                 <div>
                                     <p className="text-light font-medium">{p.event.title}</p>
                                     <p className="text-light/50 text-xs mt-1">{new Date(p.event.date).toLocaleString('tr-TR')} · {p.event.address}</p>
