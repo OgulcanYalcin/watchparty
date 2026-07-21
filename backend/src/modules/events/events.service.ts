@@ -11,6 +11,28 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { EventStatus, RequestStatus } from '@prisma/client';
 import { FilterEventDto } from './dto/filter-events.dto';
 
+interface TmdbSearchResult {
+  id: number;
+  media_type: string;
+  title?: string;
+  name?: string;
+  poster_path: string | null;
+}
+
+interface TmdbSearchResponse {
+  results: TmdbSearchResult[];
+}
+
+interface TheSportsDbTeam {
+  idTeam: string;
+  strTeam: string;
+  strBadge: string | null;
+  strFanart1: string | null;
+}
+
+interface TheSportsDbResponse {
+  teams: TheSportsDbTeam[] | null;
+}
 @Injectable()
 export class EventsService {
   constructor(
@@ -36,6 +58,7 @@ export class EventsService {
         categoryId: dto.categoryId,
         joiningMode: dto.joiningMode,
         isPaid: dto.isPaid,
+        imageUrl: dto.imageUrl,
       },
     });
     return event;
@@ -154,5 +177,46 @@ export class EventsService {
   }
   async getCategories() {
     return this.prismaService.interest.findMany();
+  }
+
+  async searchMedia(query: string) {
+    const apiKey = process.env.TMDB_API_KEY;
+    const url = `https://api.themoviedb.org/3/search/multi?api_key=${apiKey}&query=${encodeURIComponent(query)}&language=tr-TR`;
+    const response = await fetch(url);
+    const data = (await response.json()) as TmdbSearchResponse;
+
+    return data.results
+      .filter(
+        (item: { media_type: string }) =>
+          item.media_type === 'movie' || item.media_type === 'tv',
+      )
+      .map(
+        (item: {
+          id: number;
+          title?: string;
+          name?: string;
+          poster_path: string | null;
+        }) => ({
+          id: item.id,
+          title: item.title ?? item.name,
+          posterUrl: item.poster_path
+            ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
+            : null,
+        }),
+      );
+  }
+
+  async searchSports(query: string) {
+    const url = `https://www.thesportsdb.com/api/v1/json/3/searchteams.php?t=${encodeURIComponent(query)}`;
+    const response = await fetch(url);
+    const data = (await response.json()) as TheSportsDbResponse;
+
+    if (!data.teams) return [];
+
+    return data.teams.map((team) => ({
+      id: Number(team.idTeam),
+      title: team.strTeam,
+      posterUrl: team.strFanart1 ?? team.strBadge ?? null,
+    }));
   }
 }

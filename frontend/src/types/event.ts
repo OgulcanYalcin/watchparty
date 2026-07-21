@@ -29,4 +29,11 @@ export interface Event {
     isPaid: boolean;
     category: Category;
     createdBy: EventHost;
+    imageUrl: string | null;
+}
+
+export interface MediaSearchResult {
+    id: number;
+    title: string;
+    posterUrl: string | null;
 }

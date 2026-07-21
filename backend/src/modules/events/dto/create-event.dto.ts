@@ -44,4 +44,8 @@ export class CreateEventDto {
 
   @IsBoolean()
   isPaid!: boolean;
+
+  @IsOptional()
+  @IsString()
+  imageUrl?: string;
 }

@@ -66,6 +66,7 @@ model Event {
   category Interest @relation(fields: [categoryId], references: [id])
   categoryId String
   isPaid Boolean @default(false)
+  imageUrl String?
   eventParticipations EventParticipation[]
   reviews Review[]
   reports Report[]

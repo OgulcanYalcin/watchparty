@@ -153,6 +153,9 @@ export function EventDetailPage() {
             <Navbar />
             <div className="max-w-2xl mx-auto px-6 py-8">
                 <span className="text-yellow text-xs font-semibold uppercase tracking-wide">{event.category.name}</span>
+                {event.imageUrl && (
+                    <img src={event.imageUrl} alt={event.title} className="w-full h-64 object-cover rounded-xl mb-4" />
+                )}
                 <h1 className="text-3xl font-bold text-light mt-2">{event.title}</h1>
                 <p className="text-light/60 mt-2">{event.description}</p>
                 <div className="bg-surface/40 border border-purpler/20 rounded-xl p-5 mt-6 flex flex-col gap-2">

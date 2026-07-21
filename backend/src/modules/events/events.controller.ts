@@ -44,6 +44,18 @@ export class EventsController {
     return this.eventsService.getCategories();
   }
 
+  @Get('search-media')
+  @UseGuards(AuthGuard('jwt'))
+  searchMedia(@Query('query') query: string) {
+    return this.eventsService.searchMedia(query);
+  }
+
+  @Get('search-sports')
+  @UseGuards(AuthGuard('jwt'))
+  searchSports(@Query('query') query: string) {
+    return this.eventsService.searchSports(query);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.eventsService.findOne(id);

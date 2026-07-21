@@ -12,22 +12,26 @@ import { MyParticipationsPage } from './pages/MyParticipationsPage';
 import { useAuth } from './store/AuthContext';
 import { LandingPage } from './pages/LandingPage';
 import { PublicProfilePage } from './pages/PublicProfilePage';
+import { ThemeToggleButton } from './components/ThemeToggleButton';
 
 function App() {
   return (
-    <Routes>
-      <Route path='/users/:id' element={<ProtectedRoute><PublicProfilePage/></ProtectedRoute>}/>
-      <Route path='/my-participations' element={<ProtectedRoute><MyParticipationsPage/></ProtectedRoute>}/>
-      <Route path='/admin' element={<ProtectedRoute><AdminPage /></ProtectedRoute>}/>
-      <Route path="/events/new" element={<ProtectedRoute><CreateEventPage/></ProtectedRoute>} />
-      <Route path='/notifications' element= {<ProtectedRoute><NotificationsPage/></ProtectedRoute>} />
-      <Route path="/" element= {<HomeRoute/>}/>
-      <Route path="/login" element= {<LoginPage/>} />
-      <Route path="/register" element= {<RegisterPage/>} />
-      <Route path='/events/new' element= {<ProtectedRoute><CreateEventPage/></ProtectedRoute>}/>
-      <Route path='/events/:id' element= {<ProtectedRoute><EventDetailPage/></ProtectedRoute>}/>
-      <Route path='/profile' element= {<ProtectedRoute><ProfilePage/></ProtectedRoute>} />
-    </Routes>
+    <>
+      <Routes>
+        <Route path='/users/:id' element={<ProtectedRoute><PublicProfilePage/></ProtectedRoute>}/>
+        <Route path='/my-participations' element={<ProtectedRoute><MyParticipationsPage/></ProtectedRoute>}/>
+        <Route path='/admin' element={<ProtectedRoute><AdminPage /></ProtectedRoute>}/>
+        <Route path="/events/new" element={<ProtectedRoute><CreateEventPage/></ProtectedRoute>} />
+        <Route path='/notifications' element= {<ProtectedRoute><NotificationsPage/></ProtectedRoute>} />
+        <Route path="/" element= {<HomeRoute/>}/>
+        <Route path="/login" element= {<LoginPage/>} />
+        <Route path="/register" element= {<RegisterPage/>} />
+        <Route path='/events/new' element= {<ProtectedRoute><CreateEventPage/></ProtectedRoute>}/>
+        <Route path='/events/:id' element= {<ProtectedRoute><EventDetailPage/></ProtectedRoute>}/>
+        <Route path='/profile' element= {<ProtectedRoute><ProfilePage/></ProtectedRoute>} />
+      </Routes>
+      <ThemeToggleButton/>
+    </>
   );
 }
 

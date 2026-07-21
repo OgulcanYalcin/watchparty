@@ -4,6 +4,9 @@ import type { Event } from '../types/event';
 export function EventCard({ event }: { event: Event}) {
     return (
         <Link to={`/events/${event.id}`} className='bg-surface/40 border border-purple/20 rounded-xl p-5 hover:border-purple transition flex flex-col gap-2'>
+            {event.imageUrl && (
+                <img src={event.imageUrl} alt={event.title} className='w-full h-40 object-cover rounded-lg -mt-1 mb-1' />
+            )}
             <div className='flex items-center justify-between'>
                 <span className='text-yellow text-xs font-semibold uppercase tracking-wide'>
                     {event.category.name}
