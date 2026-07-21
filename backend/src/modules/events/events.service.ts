@@ -16,7 +16,7 @@ interface TmdbSearchResult {
   media_type: string;
   title?: string;
   name?: string;
-  poster_path: string | null;
+  backdrop_path: string | null;
 }
 
 interface TmdbSearchResponse {
@@ -195,12 +195,12 @@ export class EventsService {
           id: number;
           title?: string;
           name?: string;
-          poster_path: string | null;
+          backdrop_path: string | null;
         }) => ({
           id: item.id,
           title: item.title ?? item.name,
-          posterUrl: item.poster_path
-            ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
+          posterUrl: item.backdrop_path
+            ? `https://image.tmdb.org/t/p/w500${item.backdrop_path}`
             : null,
         }),
       );
