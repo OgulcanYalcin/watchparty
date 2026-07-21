@@ -70,6 +70,7 @@ model Event {
   reviews Review[]
   reports Report[]
   messages Message[]
+  notifications Notification[]
 }
 
 model EventParticipation {
@@ -138,6 +139,8 @@ model Notification{
   isRead Boolean @default(false)
   createdAt DateTime @default(now())
   user User @relation(fields: [userId], references: [id])
+  eventId String?
+  event Event? @relation(fields: [eventId], references: [id])
 }
 enum Result {
   PENDING

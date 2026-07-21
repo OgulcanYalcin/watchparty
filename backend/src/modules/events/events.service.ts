@@ -115,6 +115,7 @@ export class EventsService {
         await this.notificationService.createNotification(
           participant.userId,
           'Katıldığın bir etkinlik güncellendi',
+          eventId,
         );
       }
       return result;
@@ -145,6 +146,7 @@ export class EventsService {
         await this.notificationService.createNotification(
           participant.userId,
           'Katıldığın bir etkinlik iptal edildi',
+          eventId,
         );
       }
       return result;

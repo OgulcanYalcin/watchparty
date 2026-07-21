@@ -119,7 +119,11 @@ export class ParticipationService {
       newStatus === RequestStatus.APPROVED
         ? 'Katılım isteğin onaylandı'
         : 'Katılım isteğin reddedildi';
-    await this.notificationsService.createNotification(updated.userId, message);
+    await this.notificationsService.createNotification(
+      updated.userId,
+      message,
+      updated.eventId,
+    );
 
     return updated;
   }

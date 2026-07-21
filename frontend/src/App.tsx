@@ -11,10 +11,12 @@ import { AdminPage } from './pages/AdminPage';
 import { MyParticipationsPage } from './pages/MyParticipationsPage';
 import { useAuth } from './store/AuthContext';
 import { LandingPage } from './pages/LandingPage';
+import { PublicProfilePage } from './pages/PublicProfilePage';
 
 function App() {
   return (
     <Routes>
+      <Route path='/users/:id' element={<ProtectedRoute><PublicProfilePage/></ProtectedRoute>}/>
       <Route path='/my-participations' element={<ProtectedRoute><MyParticipationsPage/></ProtectedRoute>}/>
       <Route path='/admin' element={<ProtectedRoute><AdminPage /></ProtectedRoute>}/>
       <Route path="/events/new" element={<ProtectedRoute><CreateEventPage/></ProtectedRoute>} />

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef} from "react";
 import { useParams } from "react-router-dom";
 import { cancelEvent, getEvent, participateInEvent, updateEvent } from "../services/events";
 import { getMyProfile } from "../services/users";
@@ -8,6 +8,7 @@ import type { Participation } from "../types/participation";
 import { Navbar } from "../components/Navbar";
 import { useChat } from "../hooks/useChat";
 import { getMessages } from "../services/chat";
+import { Link } from "react-router-dom";
 
 interface ParticipantWithUser extends Participation {
     user: {
@@ -34,6 +35,11 @@ export function EventDetailPage() {
     const [editAddress, setEditAddress] = useState('');
     const [editCapacity, setEditCapacity] = useState(0);
     const [editMessage, setEditMessage] = useState('');
+    const chatEndRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        chatEndRef.current?.scrollIntoView({ behavior: 'smooth'});
+    }, [messages]);
 
     useEffect(() => {
         if (!id) return;
@@ -160,7 +166,8 @@ export function EventDetailPage() {
                     </p>
                     <p className="text-light">
                         <span className="text-purple font-medium">Host:</span>
-                        {event.createdBy.name} (itibar:{event.createdBy.reputationScore})
+                        <Link to={`/users/${event.createdBy.id}`} className="hover:text-yellow transition">
+                        {event.createdBy.name}</Link> (itibar:{event.createdBy.reputationScore})
                     </p>
                     <p className="text-light">
                         <span className="text-purple font-medium">Onay Modu:</span>
@@ -192,7 +199,7 @@ export function EventDetailPage() {
                                 <textarea value={editDescription} onChange={(e) => setEditDescription(e.target.value)} className="bg-dark border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple" rows={3}/>
                                 <input type="datetime-local" value={editDate} onChange={(e) => setEditDate(e.target.value)} className="bg-dark border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple" />
                                 <input type="text" value={editAddress} onChange={(e) => setEditAddress(e.target.value)} className="bg-dark border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple" />
-                                <input type="number" value={editCapacity} onChange={(e) => setEditCapacity(Number(e.target.validationMessage))} className="bg-dark border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple" />
+                                <input type="number" value={editCapacity} onChange={(e) => setEditCapacity(Number(e.target.value))} className="bg-dark border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple" />
                                 <div className="flex gap-2">
                                     <button type="submit" className="bg-yellow text-dark font-semibold px-4 py-2 rounded-lg hover:opacity-90 transition">Kaydet</button>
                                     <button type="button" onClick={() => setEditing(false)} className="bg-transparent border border-light/30 text-light px-4 py-2 rounded-lg">Vazgeç</button>
@@ -208,7 +215,7 @@ export function EventDetailPage() {
                                 {participants.map((p) => (
                                     <div key={p.id} className="bg-surface/40 border border-purple/20 rounded-xl p-4 flex items-center justify-between">
                                         <div>
-                                            <p className="text-light font-medium">{p.user.name}</p>
+                                            <Link to={`/users/${p.user.id}`} className="text-light font-medium hover:text-yellow transition">{p.user.name}</Link>
                                             <p className="text-light/50 text-xs">İtibar: {p.user.reputationScore} · Durum: {p.requestStatus}</p>
                                         </div>
                                         {p.requestStatus === 'PENDING' && (
@@ -232,10 +239,11 @@ export function EventDetailPage() {
                             <div className="bg-surface/40 border border-purple/20 rounded-xl p-4 h-64 overflow-y-auto flex flex-col gap-2 mb-3">
                                 {messages.map((m) => (
                                     <div key={m.id} className="text-sm">
-                                        <span className="text-purple font-medium">{m.user.name}:</span>
+                                        <Link to={`/users/${m.user.id}`} className="text-purple font-medium hover:text-yellow transition">{m.user.name}</Link>:
                                         <span className="text-light">{m.content}</span>
                                     </div>
                                 ))}
+                                <div ref={chatEndRef} />
                             </div>
                             <form onSubmit={handleSendMessage} className="flex gap-2">
                                 <input type="text" value={newMessage} onChange={(e) => setNewMessage(e.target.value)} placeholder="Mesaj yaz..." className="flex-1 bg-surface/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple"/>

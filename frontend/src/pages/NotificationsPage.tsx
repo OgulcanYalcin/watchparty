@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getNotifications, markAsRead } from "../services/notification";
 import type { Notification } from "../types/notification";
 import { Navbar } from "../components/Navbar";
+import { useNavigate } from "react-router-dom";
 
 export function NotificationsPage() {
     const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -20,6 +21,17 @@ export function NotificationsPage() {
         );
     };
 
+    const navigate = useNavigate();
+
+    const handleClick = (n: Notification) => {
+        if(!n.isRead) {
+            handleMarkAsRead(n.id);
+        }
+        if(n.eventId) {
+            navigate(`/events/${n.eventId}`);
+        }
+    }
+
     return (
         <div className="min-h-screen bg-dark">
             <Navbar  />
@@ -31,7 +43,10 @@ export function NotificationsPage() {
               ) : (
                 <div className="flex flex-col gap-3">
                     {notifications.map((n) => (
-                        <div key={n.id} onClick={() => !n.isRead && handleMarkAsRead(n.id)} className={`rounded-xl p-4 border cursor-pointer transition ${n.isRead ? 'bg-surface/20 border-light/10 text-light/50' : 'bg-surface/40 border-purple/40 text-light' }`}>
+                        <div key={n.id} onClick={() => handleClick(n)} className={`rounded-xl p-4 border cursor-pointer transition ${n.isRead ? 'bg-surface/20 border-light/10 text-light/50' : 'bg-surface/40 border-purple/40 text-light' }`}>
+                            {n.event && (
+                                <p className="text-purple text-sm font-semibold mb-1">{n.event.title}</p>
+                            )}
                             <p>{n.text}</p>
                             <p className="text-xs text-light/40 mt-1">{new Date(n.createdAt).toLocaleString('tr-TR')}
                             </p>

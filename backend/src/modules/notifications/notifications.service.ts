@@ -9,9 +9,9 @@ import { PrismaService } from '../../common/prisma/prisma.service';
 export class NotificationsService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async createNotification(userId: string, text: string) {
+  async createNotification(userId: string, text: string, eventId?: string) {
     return this.prismaService.notification.create({
-      data: { userId, text },
+      data: { userId, text, eventId },
     });
   }
 
@@ -19,6 +19,7 @@ export class NotificationsService {
     return this.prismaService.notification.findMany({
       where: { userId },
       orderBy: { createdAt: 'desc' },
+      include: { event: { select: { id: true, title: true } } },
     });
   }
 
