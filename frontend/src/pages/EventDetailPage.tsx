@@ -238,9 +238,18 @@ export function EventDetailPage() {
                         <>
                             <div className="bg-surface/40 border border-purple/20 rounded-xl p-4 h-64 overflow-y-auto flex flex-col gap-2 mb-3">
                                 {messages.map((m) => (
-                                    <div key={m.id} className="text-sm">
-                                        <Link to={`/users/${m.user.id}`} className="text-purple font-medium hover:text-yellow transition">{m.user.name}</Link>:
-                                        <span className="text-light">{m.content}</span>
+                                    <div key={m.id} className="text-sm flex items-start gap-2">
+                                        <div className="w-6 h-6 rounded-full bg-surface/60 border border-purple/30 flex items-center justify-center overflow-hidden shrink-0">
+                                            {m.user.profilePicture ? (
+                                                <img src={m.user.profilePicture} alt={m.user.name} className="w-full h-full object-cover" />
+                                            ): (
+                                                <span className="text-xs">👤</span>
+                                            )}
+                                        </div>
+                                        <div>
+                                            <Link to={`/users/${m.user.id}`} className="text-purple font-medium hover:text-yellow transition">{m.user.name}</Link>:
+                                            <span className="text-light">{m.content}</span>
+                                        </div>
                                     </div>
                                 ))}
                                 <div ref={chatEndRef} />
