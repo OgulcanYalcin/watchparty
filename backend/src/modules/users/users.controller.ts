@@ -7,6 +7,7 @@ import { HttpCode } from '@nestjs/common';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UpdateProfileDto } from './dto/update-profile.dto';
+import { VerifyEmailDto } from './dto/verify-email.dto';
 
 @Controller('users')
 export class UsersController {
@@ -39,5 +40,10 @@ export class UsersController {
       (req.user as { userId: string; email: string }).userId,
       dto,
     );
+  }
+  @HttpCode(200)
+  @Post('verify-email')
+  verifyEmail(@Body() dto: VerifyEmailDto) {
+    return this.usersService.verifyEmail(dto);
   }
 }

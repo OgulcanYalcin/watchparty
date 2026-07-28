@@ -9,3 +9,8 @@ export async function login(data: { email: string; password: string }) {
     const response = await api.post('/users/login', data);
     return response.data;
 }
+
+export async function verifyEmail(data: {email: string; code: string}) {
+    const response = await api.post('/users/verify-email', data);
+    return response.data;
+}

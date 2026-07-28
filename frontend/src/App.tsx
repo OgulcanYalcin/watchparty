@@ -13,6 +13,7 @@ import { useAuth } from './store/AuthContext';
 import { LandingPage } from './pages/LandingPage';
 import { PublicProfilePage } from './pages/PublicProfilePage';
 import { ThemeToggleButton } from './components/ThemeToggleButton';
+import { VerifyEmailPage } from './pages/VerifyEmailPage';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path='/events/new' element= {<ProtectedRoute><CreateEventPage/></ProtectedRoute>}/>
         <Route path='/events/:id' element= {<ProtectedRoute><EventDetailPage/></ProtectedRoute>}/>
         <Route path='/profile' element= {<ProtectedRoute><ProfilePage/></ProtectedRoute>} />
+        <Route path='/verify-email' element={<VerifyEmailPage/>} />
       </Routes>
       <ThemeToggleButton/>
     </>

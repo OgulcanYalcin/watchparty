@@ -2,6 +2,7 @@ import {
   ForbiddenException,
   Injectable,
   NotFoundException,
+  ConflictException,
 } from '@nestjs/common';
 import { PrismaService } from '../../common/prisma/prisma.service';
 import { RegisterDto } from './dto/register.dto';
@@ -11,6 +12,7 @@ import { UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserStatus } from '@prisma/client';
 import { UpdateProfileDto } from './dto/update-profile.dto';
+import { VerifyEmailDto } from './dto/verify-email.dto';
 
 @Injectable()
 export class UsersService {
@@ -21,13 +23,18 @@ export class UsersService {
 
   async register(dto: RegisterDto) {
     const hashedPassword = await bcrypt.hash(dto.password, 10);
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
     const user = await this.prismaService.user.create({
       data: {
         email: dto.email,
         name: dto.name,
+        emailVerificationCode: code,
+        emailVerificationExpiresAt: expiresAt,
         passwordHash: hashedPassword,
       },
     });
+    await this.sendVerificationEmail(dto.email, code);
     const { passwordHash, ...safeUser } = user;
     return safeUser;
   }
@@ -42,6 +49,9 @@ export class UsersService {
     const isMatch = await bcrypt.compare(dto.password, user.passwordHash);
     if (!isMatch) {
       throw new UnauthorizedException('Invalid credentials');
+    }
+    if (!user.emailVerified) {
+      throw new ForbiddenException('Lütfen önce e-postanı doğrula');
     }
     if (user.status !== UserStatus.ACTIVE) {
       if (user.status === UserStatus.SUSPENDED) {
@@ -102,5 +112,49 @@ export class UsersService {
       throw new NotFoundException('Kullanıcı Bulunamadı');
     }
     return user;
+  }
+
+  private async sendVerificationEmail(email: string, code: string) {
+    await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: 'Watch Party <noreply@mail.ogulcnyalcin.com>',
+        to: email,
+        subject: 'E-posta Doğrulama Kodun',
+        html: `<p>Watch Part'e hoş geldin! Doğrulama kodun: <b>${code}</b></p><p>Bu kod 15 dakika geçerlidir.</p>`,
+      }),
+    });
+  }
+
+  async verifyEmail(dto: VerifyEmailDto) {
+    const user = await this.prismaService.user.findUnique({
+      where: { email: dto.email },
+    });
+    if (!user) {
+      throw new NotFoundException('Kullanıcı Bulunamadı');
+    }
+    if (user.emailVerified) {
+      throw new ConflictException('e-posta zaten doğrulanmış');
+    }
+    if (
+      user.emailVerificationCode !== dto.code ||
+      !user.emailVerificationExpiresAt ||
+      user.emailVerificationExpiresAt < new Date()
+    ) {
+      throw new UnauthorizedException('Kod geçersiz veya süresi dolmuş');
+    }
+    await this.prismaService.user.update({
+      where: { id: user.id },
+      data: {
+        emailVerified: true,
+        emailVerificationCode: null,
+        emailVerificationExpiresAt: null,
+      },
+    });
+    return { message: 'E-posta doğrulandı' };
   }
 }

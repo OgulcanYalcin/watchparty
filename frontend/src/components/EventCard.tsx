@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
 import type { Event } from '../types/event';
 
-export function EventCard({ event }: { event: Event}) {
+export function EventCard({ event, linkTo  }: { event: Event; linkTo?: string }) {
     return (
-        <Link to={`/events/${event.id}`} className='bg-surface/40 border border-purple/20 rounded-xl p-5 hover:border-purple transition flex flex-col gap-2'>
+        <Link to={linkTo ?? `/events/${event.id}`} className='bg-surface/40 border border-purple/20 rounded-xl p-5 hover:border-purple transition flex flex-col gap-2'>
             {event.imageUrl && (
                 <img src={event.imageUrl} alt={event.title} className='w-full h-56 object-cover object-top rounded-lg -mt-1 mb-1' />
             )}

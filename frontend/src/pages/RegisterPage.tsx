@@ -16,7 +16,7 @@ export function RegisterPage() {
         try {
             await register({ name, email, password });
             setSuccess(true);
-            setTimeout(() => navigate('/login'), 1500);
+            setTimeout(() => navigate('/verify-email', { state: {email }}), 1500);
         } catch {
             setError('Kayıt oluşturulamadı, bilgileri kontrol et');
         }
@@ -32,7 +32,7 @@ export function RegisterPage() {
             {error && <p className='text-yellow text-sm text-center'>{error}</p>}
             {success && (
                 <p className='text-yellow text-sm text-center'>
-                    Kayıt başarılı! Giriş sayfasına yönlendiriliyorsun...
+                    Kayıt başarılı! Doğrulama sayfasına yönlendiriliyorsun...
                 </p>
             )}
             <input type='text' placeholder='Ad Soyad' value={name} onChange={(e) => setName(e.target.value)} className='bg-dark border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple' required/>

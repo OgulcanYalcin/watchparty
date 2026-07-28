@@ -36,10 +36,10 @@ export function LandingPage() {
             </section>
 
             <section className="max-w-5xl mx-auto px-6 pb-16">
-                <h2 className="text-2xl font-bold text-light mb-6">Güncel Etkinlikler</h2>
+                <h2 className="text-2xl font-bold text-light mb-6">Tüm Etkinlikler</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {events.slice(0, 6).map((event) => (
-                        <EventCard key={event.id} event={event} />
+                    {events.map((event) => (
+                        <EventCard key={event.id} event={event} linkTo=""/>
                     ))}
                 </div>
             </section>
