@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { getMyParticipations } from "../services/participation";
 import type { MyParticipation } from "../services/participation";
 import { Navbar } from "../components/Navbar";
+import { EmptyState } from "../components/EmptyState";
 
 const statusLabels: Record<string, string> = {
     PENDING: 'Beklemede',
@@ -33,7 +34,7 @@ export function MyParticipationsPage() {
                 {loading ? (
                     <p className="text-light/60">Yükleniyor...</p>
                 ): participations.length === 0 ? (
-                    <p className="text-light/60">Henüz bir etkinliğe katılım isteği göndermedin</p>
+                    <EmptyState icon="🎫" message="Henüz bir etkinliğe katılım isteği göndermedin"/>
                 ): (
                     <div className="flex flex-col gap-3">
                         {participations.map((p) => (

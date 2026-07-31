@@ -10,7 +10,7 @@ import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
 import { UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserStatus } from '@prisma/client';
+import { Prisma, UserStatus } from '@prisma/client';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 
@@ -25,18 +25,28 @@ export class UsersService {
     const hashedPassword = await bcrypt.hash(dto.password, 10);
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
-    const user = await this.prismaService.user.create({
-      data: {
-        email: dto.email,
-        name: dto.name,
-        emailVerificationCode: code,
-        emailVerificationExpiresAt: expiresAt,
-        passwordHash: hashedPassword,
-      },
-    });
-    await this.sendVerificationEmail(dto.email, code);
-    const { passwordHash, ...safeUser } = user;
-    return safeUser;
+    try {
+      const user = await this.prismaService.user.create({
+        data: {
+          email: dto.email,
+          name: dto.name,
+          emailVerificationCode: code,
+          emailVerificationExpiresAt: expiresAt,
+          passwordHash: hashedPassword,
+        },
+      });
+      await this.sendVerificationEmail(dto.email, code);
+      const { passwordHash, ...safeUser } = user;
+      return safeUser;
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
+        throw new ConflictException('Bu e-posta adresi zaten kayıtlı');
+      }
+      throw error;
+    }
   }
 
   async login(dto: LoginDto) {
@@ -112,6 +122,10 @@ export class UsersService {
       throw new NotFoundException('Kullanıcı Bulunamadı');
     }
     return user;
+  }
+
+  async getUserCount() {
+    return this.prismaService.user.count();
   }
 
   private async sendVerificationEmail(email: string, code: string) {

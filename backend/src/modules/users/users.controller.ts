@@ -29,6 +29,10 @@ export class UsersController {
       (req.user as { userId: string; email: string }).userId,
     );
   }
+  @Get('count')
+  getUserCount() {
+    return this.usersService.getUserCount();
+  }
   @Get(':id')
   getPublicProfile(@Param('id') id: string) {
     return this.usersService.getPublicProfile(id);

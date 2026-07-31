@@ -1,15 +1,16 @@
 import { Link } from 'react-router-dom';
 import type { Event } from '../types/event';
+import { getCategoryIcon } from '../utils/categoryIcon';
 
 export function EventCard({ event, linkTo  }: { event: Event; linkTo?: string }) {
     return (
-        <Link to={linkTo ?? `/events/${event.id}`} className='bg-surface/40 border border-purple/20 rounded-xl p-5 hover:border-purple transition flex flex-col gap-2'>
+        <Link to={linkTo ?? `/events/${event.id}`} className='bg-surface/40 border border-purple/20 rounded-xl p-5 hover:border-purple hover:scale-[1.02] hover:shadow-lg hover:shadow-purple/20 transition flex flex-col gap-2'>
             {event.imageUrl && (
                 <img src={event.imageUrl} alt={event.title} className='w-full h-56 object-cover object-top rounded-lg -mt-1 mb-1' />
             )}
             <div className='flex items-center justify-between'>
                 <span className='text-yellow text-xs font-semibold uppercase tracking-wide'>
-                    {event.category.name}
+                    {getCategoryIcon(event.category.name)} {event.category.name}
                 </span>
                 {event.status === 'CANCELLED' && (
                     <span className='text-red-400 text-sx font-semibold'>İptal Edildi</span>

@@ -9,6 +9,8 @@ import { Navbar } from "../components/Navbar";
 import { useChat } from "../hooks/useChat";
 import { getMessages } from "../services/chat";
 import { Link } from "react-router-dom";
+import { getCategoryIcon } from "../utils/categoryIcon";
+import { EmptyState } from "../components/EmptyState";
 
 interface ParticipantWithUser extends Participation {
     user: {
@@ -152,7 +154,7 @@ export function EventDetailPage() {
         <div className="min-h-screen bg-dark">
             <Navbar />
             <div className="max-w-2xl mx-auto px-6 py-8">
-                <span className="text-yellow text-xs font-semibold uppercase tracking-wide">{event.category.name}</span>
+                <span className="text-yellow text-xs font-semibold uppercase tracking-wide">{getCategoryIcon(event.category.name)} {event.category.name}</span>
                 {event.imageUrl && (
                     <div className="w-full h-64 rounded-xl overflow-hidden mb-4">
                         <img src={event.imageUrl} alt={event.title} className="w-full h-full object-cover" />
@@ -214,7 +216,7 @@ export function EventDetailPage() {
                         {editMessage && <p className="text-purple mb*4">{editMessage}</p>}
                         <h2 className="text-xl font-bold text-light mb-4">Katılım İstekleri</h2>
                         {participants.length === 0 ? (
-                            <p className="text-light/60">Henüz katılım isteği yok.</p>
+                            <EmptyState icon="📭" message="Henüz katılım isteği yok."/>
                         ): (
                             <div className="flex flex-col gap-3">
                                 {participants.map((p) => (

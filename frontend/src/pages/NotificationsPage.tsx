@@ -3,6 +3,7 @@ import { getNotifications, markAsRead } from "../services/notification";
 import type { Notification } from "../types/notification";
 import { Navbar } from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
+import { EmptyState } from "../components/EmptyState";
 
 export function NotificationsPage() {
     const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -39,7 +40,7 @@ export function NotificationsPage() {
               <h1 className="text-2xl font-bold text-light mb-6">Bildirimler</h1>{loading ? (
                 <p className="text-light/60">Yükleniyor...</p>
               ) : notifications.length === 0 ? (
-                <p className="text-light/60">Hiç bildirimin yok.</p>
+                <EmptyState icon="🔕" message="Hiç bildirimin yok."/>
               ) : (
                 <div className="flex flex-col gap-3">
                     {notifications.map((n) => (

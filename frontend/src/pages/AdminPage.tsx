@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getReports, resolveReport, suspendUser, banUser, getStats, } from '../services/admin';
 import type { Report, Stats } from '../services/admin';
 import { Navbar } from '../components/Navbar';
+import { EmptyState } from "../components/EmptyState";
 
 export function AdminPage() {
     const [reports, setReports] = useState<Report[]>([]);
@@ -68,7 +69,7 @@ export function AdminPage() {
                 )}
                 <h2 className="text-xl font-bold text-light mb-4">Raporlar</h2>
                 {reports.length === 0 ? (
-                    <p className="text-light/60">Hiç rapor yok.</p>
+                    <EmptyState icon="✅" message="Hiç rapor yok."/>
                 ): (
                     <div className="flex flex-col gap-3">{reports.map((r) => (
                         <div key={r.id} className="bg-surface/40 border border-purple/20 rounded-xl p-4">

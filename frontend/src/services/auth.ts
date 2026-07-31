@@ -14,3 +14,8 @@ export async function verifyEmail(data: {email: string; code: string}) {
     const response = await api.post('/users/verify-email', data);
     return response.data;
 }
+
+export async function getUserCount() {
+    const response = await api.get<{count: number}>('/users/count');
+    return response.data;
+}
