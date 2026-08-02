@@ -29,6 +29,12 @@ export class ParticipationService {
           throw new NotFoundException('Etkinlik Bulunamadı');
         }
 
+        if (event.date < new Date()) {
+          throw new ForbiddenException(
+            'Bu etkinliğin tarihi geçmiş, artık katılamazsın',
+          );
+        }
+
         const approvedCount = await tx.eventParticipation.count({
           where: { eventId, requestStatus: RequestStatus.APPROVED },
         });

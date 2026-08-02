@@ -11,6 +11,7 @@ import { NotificationsService } from '../notifications/notifications.service';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { EventStatus, RequestStatus } from '@prisma/client';
 import { FilterEventDto } from './dto/filter-events.dto';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 interface TmdbSearchResult {
   id: number;
@@ -64,6 +65,12 @@ export class EventsService {
     dto: CreateEventDto,
     user: { userId: string; email: string },
   ) {
+    const hasUnreviewed = await this.hasUnreviewedPastEvents(user.userId);
+    if (hasUnreviewed) {
+      throw new ForbiddenException(
+        'Yeni etkinlik oluşturmadan önce geçmiş etkinliklerindeki katılımcıları değerlendirmelisin',
+      );
+    }
     const { latitude, longitude } = await this.geocodeAddress(dto.address);
     const event = await this.prismaService.event.create({
       data: {
@@ -85,7 +92,9 @@ export class EventsService {
   }
 
   async findAll(filters?: FilterEventDto) {
-    const where: Record<string, unknown> = {};
+    const where: Record<string, unknown> = {
+      status: { not: EventStatus.COMPLETED },
+    };
     if (filters?.categoryId) {
       where.categoryId = filters.categoryId;
     }
@@ -226,6 +235,18 @@ export class EventsService {
       );
   }
 
+  @Cron(CronExpression.EVERY_HOUR)
+  async archiveExpiredEvents() {
+    const twelveHoursAgo = new Date(Date.now() - 12 * 60 * 60 * 1000);
+    await this.prismaService.event.updateMany({
+      where: {
+        status: { in: [EventStatus.PLANNED, EventStatus.CANCELLED] },
+        date: { lt: twelveHoursAgo },
+      },
+      data: { status: EventStatus.COMPLETED },
+    });
+  }
+
   async searchSports(query: string) {
     const url = `https://www.thesportsdb.com/api/v1/json/3/searchteams.php?t=${encodeURIComponent(query)}`;
     const response = await fetch(url);
@@ -238,5 +259,32 @@ export class EventsService {
       title: team.strTeam,
       posterUrl: team.strFanart1 ?? team.strBadge ?? null,
     }));
+  }
+
+  private async hasUnreviewedPastEvents(userId: string): Promise<boolean> {
+    const sixHoursAgo = new Date(Date.now() - 6 * 60 * 60 * 1000);
+    const pastHostedEvents = await this.prismaService.event.findMany({
+      where: {
+        createdById: userId,
+        date: { lt: sixHoursAgo },
+      },
+      include: {
+        eventParticipations: {
+          where: { requestStatus: RequestStatus.APPROVED },
+        },
+        reviews: true,
+      },
+    });
+
+    return pastHostedEvents.some((event) => {
+      const reviewedUserIds = new Set(
+        event.reviews
+          .filter((review) => review.senderUserId === userId)
+          .map((review) => review.receiverUserId),
+      );
+      return event.eventParticipations.some(
+        (participation) => !reviewedUserIds.has(participation.userId),
+      );
+    });
   }
 }

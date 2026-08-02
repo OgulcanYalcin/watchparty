@@ -64,8 +64,13 @@ export function CreateEventPage() {
                 imageUrl: imageUrl || undefined,
             });
             navigate(`/events/${event.id}`);
-        }  catch{
-            setError('Etkinlik oluşturulamadı, bilgileri kontrol et.');
+        }  catch(err) {
+            const axiosError = err as { response?: { status?: number; data?: { message?: string } } };
+            if (axiosError.response?.status === 403) {
+                setError(axiosError.response.data?.message ?? 'Önce geçmiş etkinliklerindeki katılımcıları değerlendirmelisin.');
+            } else {
+                setError('Etkinlik oluşturulamadı, bilgileri kontrol et.');
+            }
         }  finally {
             setIsSubmitting(false);
             
