@@ -2,8 +2,6 @@ import {
   IsString,
   IsOptional,
   IsInt,
-  IsLatitude,
-  IsLongitude,
   IsDateString,
   IsEnum,
   IsBoolean,
@@ -26,15 +24,6 @@ export class CreateEventDto {
 
   @IsString()
   address!: string;
-
-  @IsLatitude()
-  latitude!: number;
-
-  @IsLongitude()
-  longitude!: number;
-
-  @IsString()
-  placeId!: string;
 
   @IsString()
   categoryId!: string;

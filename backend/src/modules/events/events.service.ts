@@ -3,6 +3,7 @@ import {
   ForbiddenException,
   Injectable,
   NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { PrismaService } from '../../common/prisma/prisma.service';
 import { CreateEventDto } from './dto/create-event.dto';
@@ -40,10 +41,30 @@ export class EventsService {
     private readonly notificationService: NotificationsService,
   ) {}
 
+  private async geocodeAddress(address: string) {
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json&limit=1`;
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'WatchPartyApp/1.0 (contact@ogulcnyalcin.com)',
+      },
+    });
+    const data = (await response.json()) as { lat: string; lon: string }[];
+    if (data.length === 0) {
+      throw new BadRequestException(
+        'Adres bulunamadı, daha açık bir adres yazmayı dene',
+      );
+    }
+    return {
+      latitude: parseFloat(data[0].lat),
+      longitude: parseFloat(data[0].lon),
+    };
+  }
+
   async createEvent(
     dto: CreateEventDto,
     user: { userId: string; email: string },
   ) {
+    const { latitude, longitude } = await this.geocodeAddress(dto.address);
     const event = await this.prismaService.event.create({
       data: {
         createdById: user.userId,
@@ -52,9 +73,8 @@ export class EventsService {
         date: dto.date,
         capacity: dto.capacity,
         address: dto.address,
-        latitude: dto.latitude,
-        longitude: dto.longitude,
-        placeId: dto.placeId,
+        latitude,
+        longitude,
         categoryId: dto.categoryId,
         joiningMode: dto.joiningMode,
         isPaid: dto.isPaid,

@@ -6,6 +6,7 @@ import { getMyParticipations } from "../services/participation";
 import { getEvents } from "../services/events";
 import { useTheme } from "../store/ThemeContext";
 import { RainbowBackground } from "../components/RainbowBackground";
+import { formatRating } from "../utils/formatRating";
 
 export function ProfilePage() {
     const [profile, setProfile] = useState<MyProfile | null>(null);
@@ -94,8 +95,8 @@ export function ProfilePage() {
 
                     <div className="grid grid-cols-3 gap-3 mb-8">
                         <div className="bg-surface/40 border border-purple/20 rounded-xl p-4 text-center">
-                            <p className="text-2xl font-bold text-yellow">{profile.reputationScore}</p>
-                            <p className="text-light/50 text-xs mt-1">İtibar Puanı</p>
+                            <p className={`font-bold text-yellow ${profile.reputationScore > 0 ? 'text-lg' : 'text-sm'}`}>{formatRating(profile.reputationScore)}</p>
+                            <p className="text-light/50 text-xs mt-1">Değerlendirme</p>
                         </div>
                         <div className="bg-surface/40 border border-purple/20 rounded-xl p-4 text-center">
                             <p className="text-2xl font-bold text-purple">{stats.participated}</p>

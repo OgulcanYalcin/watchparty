@@ -11,6 +11,7 @@ import { getMessages } from "../services/chat";
 import { Link } from "react-router-dom";
 import { getCategoryIcon } from "../utils/categoryIcon";
 import { EmptyState } from "../components/EmptyState";
+import { formatRating } from "../utils/formatRating";
 
 interface ParticipantWithUser extends Participation {
     user: {
@@ -174,7 +175,7 @@ export function EventDetailPage() {
                     <p className="text-light">
                         <span className="text-purple font-medium">Host:</span>
                         <Link to={`/users/${event.createdBy.id}`} className="hover:text-yellow transition">
-                        {event.createdBy.name}</Link> (itibar:{event.createdBy.reputationScore})
+                        {event.createdBy.name}</Link> ({formatRating(event.createdBy.reputationScore)})
                     </p>
                     <p className="text-light">
                         <span className="text-purple font-medium">Onay Modu:</span>
@@ -223,7 +224,7 @@ export function EventDetailPage() {
                                     <div key={p.id} className="bg-surface/40 border border-purple/20 rounded-xl p-4 flex items-center justify-between">
                                         <div>
                                             <Link to={`/users/${p.user.id}`} className="text-light font-medium hover:text-yellow transition">{p.user.name}</Link>
-                                            <p className="text-light/50 text-xs">İtibar: {p.user.reputationScore} · Durum: {p.requestStatus}</p>
+                                            <p className="text-light/50 text-xs">{formatRating(p.user.reputationScore)} · Durum: {p.requestStatus}</p>
                                         </div>
                                         {p.requestStatus === 'PENDING' && (
                                             <div className="flex gap-2">

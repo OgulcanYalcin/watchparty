@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { getUserProfile } from "../services/users";
 import type { PublicProfile } from "../types/user";
 import { Navbar } from "../components/Navbar";
+import { formatRating } from "../utils/formatRating";
 
 export function PublicProfilePage(){
     const { id } = useParams<{id: string}>();
@@ -34,7 +35,7 @@ export function PublicProfilePage(){
                         )}
                     </div>
                     <h1 className="text-2xl font-bold text-light mb-2">{profile.name}</h1>
-                    <p className="text-purple font-medium mb-1">İtibar Puanı: {profile.reputationScore}</p>
+                    <p className="text-purple font-medium mb-1">Değerlendirme: {formatRating(profile.reputationScore)}</p>
                     <p className="text-light/60 text-sm mb-6">Üyelik Tarihi: {new Date(profile.createdAt).toLocaleDateString('tr-TR')}</p>
                     {profile.biography && (
                         <p className="text-light/80">{profile.biography}</p>

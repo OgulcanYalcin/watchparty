@@ -18,8 +18,7 @@ export interface Event {
     capacity: string;
     address: string;
     latitude: number;
-    longtitude: number;
-    placeId: string;
+    longitude: number;
     joiningMode: 'AUTOMATIC' | 'MANUAL';
     status: 'PLANNED' | 'CANCELLED' | 'COMPLETED';
     createdById: string;

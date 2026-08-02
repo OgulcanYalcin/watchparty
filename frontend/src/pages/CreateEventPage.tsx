@@ -14,9 +14,6 @@ export function CreateEventPage() {
     const [date, setDate] = useState('');
     const [capacity, setCapacity] = useState(5);
     const [address, setAddress] = useState('');
-    const [latitude, setLatitude] = useState('');
-    const [longitude, setLongtitude] = useState('');
-    const [placeId, setPlaceId] = useState('');
     const [categoryId, setCategoryId] = useState('');
     const [joiningMode, setJoiningMode] = useState<'AUTOMATIC' | 'MANUAL'>('AUTOMATIC');
     const [isPaid, setIsPaid] = useState(false);
@@ -61,9 +58,6 @@ export function CreateEventPage() {
                 date: new Date(date).toISOString(),
                 capacity: Number(capacity),
                 address,
-                latitude: Number(latitude),
-                longitude: Number(longitude),
-                placeId,
                 categoryId,
                 joiningMode,
                 isPaid,
@@ -110,21 +104,6 @@ export function CreateEventPage() {
                         <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} className='w-full bg-surface/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple' required/>
                     </div>
 
-                    <div className='flex gap-3'>
-                        <div className='flex-1'>
-                            <label className='text-light/60 text-sm block mb-1'>Enlem</label>
-                            <input type="number" step="any" value={latitude} onChange={(e) => setLatitude(e.target.value)} className='w-full bg-surface/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple'required />
-                        </div>
-                        <div className='flex-1'>
-                            <label className='text-light/60 text-sm block mb-1'>Boylam</label>
-                            <input type="number" step="any" value={longitude} onChange={(e) => setLongtitude(e.target.value)} className='w-full bg-surface/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple' required />
-                        </div>
-                    </div>
-
-                    <div>
-                        <label className='text-light/60 text-sm block mb-1'>Place ID</label>
-                        <input type="text" value={placeId} onChange={(e) => setPlaceId(e.target.value)} className='w-full bg-surface/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple' required/>
-                    </div>
                     <div>
                         <label className='text-light/60 text-sm block mb-1'>Kapasite</label>
                         <input type="text" min={1} value={capacity} onChange={(e) => setCapacity(Number(e.target.value))} className='w-full bg-surface/40 border border-light/20 text-light rounded-lg px-4 py-2 focus:outline-none focus:border-purple' required />

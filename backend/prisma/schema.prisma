@@ -22,7 +22,7 @@ model User {
   profilePicture String?
   biography String?
   theme String @default("dark")
-  reputationScore Int @default(0)
+  reputationScore Float @default(0)
   status  UserStatus @default(ACTIVE)
   role UserRole @default(USER)
   createdAt DateTime @default(now())
@@ -59,7 +59,6 @@ model Event {
   address String
   latitude Float
   longitude Float
-  placeId String
   joiningMode JoiningMode @default(AUTOMATIC)
   status EventStatus @default(PLANNED)
   createdBy User @relation(fields: [createdById], references: [id])

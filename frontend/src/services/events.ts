@@ -24,9 +24,6 @@ export async function createEvent(data: {
     date: string;
     capacity: number;
     address: string;
-    latitude: number;
-    longitude: number;
-    placeId: string;
     categoryId: string;
     joiningMode: 'AUTOMATIC' | 'MANUAL';
     isPaid: boolean;
@@ -48,7 +45,6 @@ export async function updateEvent(id: string, data: Partial<{
     address: string;
     latitude: number;
     longitude: number;
-    placeId: string;
     categoryId: string;
     joiningMode: 'AUTOMATIC' | 'MANUAL';
     isPaid: boolean;

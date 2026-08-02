@@ -78,35 +78,9 @@ export class TrustService {
       _avg: { rating: true },
     });
 
-    const totalMarked = await this.prismaService.eventParticipation.count({
-      where: { userId, attended: { not: null } },
-    });
-
-    const attendedCount = await this.prismaService.eventParticipation.count({
-      where: { userId, attended: true },
-    });
-
-    const hasReviews = average._avg.rating !== null;
-    const hasAttendanceData = totalMarked > 0;
-
-    const reviewScore = hasReviews ? (average._avg.rating! / 5) * 100 : null;
-    const attendanceScore = hasAttendanceData
-      ? (attendedCount / totalMarked) * 100
-      : null;
-
-    let finalScore: number;
-    if (reviewScore !== null && attendanceScore !== null) {
-      finalScore = reviewScore * 0.6 + attendanceScore * 0.4;
-    } else if (reviewScore !== null) {
-      finalScore = reviewScore;
-    } else if (attendanceScore !== null) {
-      finalScore = attendanceScore;
-    } else {
-      finalScore = 0;
-    }
     return this.prismaService.user.update({
       where: { id: userId },
-      data: { reputationScore: Math.round(finalScore) },
+      data: { reputationScore: average._avg.rating ?? 0 },
     });
   }
 
